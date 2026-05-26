@@ -2,8 +2,9 @@
 Renders a 3D object from scratch using just python.
 
 ## How It Works
-- Uses the trigonometric formulas to convert points from 3d space onto a 2d screen to be rendered via `tkinter`. *Note: This is still being worked on, **the rotation is currently broken.***
+- Uses trigonometry to convert points from 3d space onto a 2d screen to be rendered via `tkinter`. *Note: Only simple wireframe cubes have been integrated. Change their, size, location, rotation, colour, etc.*
 
 ## Setup
 1. Clone the repository.
-2. Run python `main.py`.
+2. Set up the `render` function as desired.
+3. Run python `main.py`.

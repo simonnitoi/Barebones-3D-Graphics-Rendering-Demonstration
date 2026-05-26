@@ -28,7 +28,6 @@ def getCubePoints(halfCubeDim,coords,rotsDeg):
     for i in pointsUnrotated:
         pointsRotated.append(rotatePoint(i,[rotRadX,rotRadY,rotRadZ],[cubeX,cubeY,cubeZ]))
     return pointsRotated
-    return pointsUnrotated
 
 def rotatePoint(point,rots,rotPoint):
 
@@ -126,7 +125,7 @@ def render():
     canvas.pack()
 
     dist[2] += 2
-    rots[2] += 1.5
+    rots[2] += 1
 
     root.after(8,render)
 
