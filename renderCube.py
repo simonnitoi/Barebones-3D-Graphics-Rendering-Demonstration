@@ -28,6 +28,7 @@ def getCubePoints(halfCubeDim,coords,rotsDeg):
     for i in pointsUnrotated:
         pointsRotated.append(rotatePoint(i,[rotRadX,rotRadY,rotRadZ],[cubeX,cubeY,cubeZ]))
     return pointsRotated
+    return pointsUnrotated
 
 def rotatePoint(point,rots,rotPoint):
 
@@ -44,32 +45,23 @@ def rotatePoint(point,rots,rotPoint):
     rotRY = rots[1]
     rotRZ = rots[2]
 
-    # rotate by x-axis
-    if z-rz == 0:
-        origRX = math.atan((x-rx)/(z-rz+(10**-20)))
-    else:
-        origRX = math.atan((x-rx)/(z-rz))
-
-    x = x*(math.sin(origRX-rotRX)/math.sin(origRX))
-    z = z*(math.cos(origRX-rotRX)/math.cos(origRX))
-
     # rotate by y-axis
-    if x-rx == 0:
-        origRY = math.atan((y-ry)/(x-rx+(10**-20)))
-    else:
-        origRY = math.atan((y-ry)/(x-rx))
+    rad = math.sqrt((x-rx)**2+(z-rz)**2)
+    startAngle = math.atan2((z-rz),(x-rx))
+    x = rx + rad*math.cos(startAngle+rotRX)
+    z = rz + rad*math.sin(startAngle+rotRX)
 
-    y = y*(math.sin(origRY-rotRY)/math.sin(origRY))
-    x = x*(math.cos(origRY-rotRY)/math.cos(origRY))
+    # rotate by z-axis
+    rad = math.sqrt((y-ry)**2+(x-rx)**2)
+    startAngle = math.atan2((x-rx),(y-ry))
+    y = ry + rad*math.cos(startAngle+rotRY)
+    x = rx + rad*math.sin(startAngle+rotRY)
 
-    # # # rotate by z-axis
-    if y-ry == 0:
-        origRZ = math.atan((z-rz)/(y-ry+(10**-20)))
-    else:
-        origRZ = math.atan((z-rz)/(y-ry))
-
-    z = z*(math.sin(origRZ-rotRZ)/math.sin(origRZ))
-    y = y*(math.cos(origRZ-rotRZ)/math.cos(origRZ))
+    # rotate by x-axis
+    rad = math.sqrt((z-rz)**2+(y-ry)**2)
+    startAngle = math.atan2((y-ry),(z-rz))
+    z = rz + rad*math.cos(startAngle+rotRZ)
+    y = ry + rad*math.sin(startAngle+rotRZ)
 
     return [x,y,z]
 
@@ -126,11 +118,6 @@ size = 100
 dist = [0,0,0]
 rots = [0,0,0]
 
-# cube3D = getCubePoints(100,[0,0,50],[0,0,0])
-# cube2D = getDots(cube3D)
-# drawCube(cube2D,2,"white")
-# canvas.pack()
-
 def render():
     canvas.delete("all")
     cube3D = getCubePoints(size,dist,rots)
@@ -138,7 +125,8 @@ def render():
     drawCube(cube2D,2,"white")
     canvas.pack()
 
-    rots[0] += 1
+    dist[2] += 2
+    rots[2] += 1.5
 
     root.after(8,render)
 
