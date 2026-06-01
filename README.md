@@ -1,5 +1,5 @@
 # Barebones 3D Graphics Rendering Demonstration
-Renders a 3D object from scratch using just native python.
+Renders a 3D object from scratch using just native python. I made it my mission to do this by formulating all the math myself as a personal project. As such, there may be more efficient formulas to be used, but what I've made here myself works.
 
 ## How It Works
 - Use trigonometry to render 3d objects from scratch in a simple python-native script with `tkinter`. Understanding it is a good way to get a grasp on how advanced visual renders work under the hood, at a very primitive level.
