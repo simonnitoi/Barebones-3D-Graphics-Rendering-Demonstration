@@ -11,3 +11,5 @@ Renders a 3D object from scratch using just native python. I made it my mission 
 1. Clone the repository.
 2. Set up the `render` function as desired.
 3. Run python `main.py`.
+
+![Tracking Cube Render](assets/demoCubeRender.gif)
