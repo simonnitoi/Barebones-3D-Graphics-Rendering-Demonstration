@@ -26,7 +26,7 @@ def getCubePoints(halfCubeDim,coords,rotsDeg):
               [cubeX-halfCubeDim,-cubeY-halfCubeDim,cubeZ+halfCubeDim]]
     pointsRotated = []
     for i in pointsUnrotated:
-        pointsRotated.append(rotatePoint(i,[rotRadX,rotRadY,rotRadZ],[cubeX,cubeY,cubeZ]))
+        pointsRotated.append(rotatePoint(i,[rotRadX,rotRadY,rotRadZ],[cubeX,-cubeY,cubeZ]))
     return pointsRotated
 
 def rotatePoint(point,rots,rotPoint):
@@ -63,6 +63,35 @@ def rotatePoint(point,rots,rotPoint):
     y = ry + rad*math.sin(startAngle+rotRZ)
 
     return [x,y,z]
+
+def facePoint(points,pointTo,rotPoint):
+    x = pointTo[0]
+    y = pointTo[1]
+    z = pointTo[2]
+
+    rx = rotPoint[0]
+    ry = -rotPoint[1]
+    rz = rotPoint[2]
+
+    dx = x-rx
+    dy = y-ry
+    dz = z-rz
+
+    new = []
+
+    if (z == rz):
+        rotRY = math.atan2(dx,dy)
+        for i in points:
+            new.append(rotatePoint(i,[0,rotRY,0],[rx,ry,rz]))
+        return new
+
+    else:
+        rotRX = math.atan2(dx,dz)
+        rotRZ = math.atan2(dy,dz)
+        for i in points:
+            new.append(rotatePoint(i,[rotRX,0,rotRZ],[rx,ry,rz]))
+        return new
+
 
 def getDots(points):
     centerX = width/2
@@ -111,23 +140,29 @@ def drawCube(cube,thickness,colour):
 
     drawDots(cube,thickness,colour)
 
-
+def getMouse():
+    mouseX = root.winfo_pointerx() - root.winfo_rootx() - (width/2)
+    mouseY = root.winfo_pointery() - root.winfo_rooty() - (height/2)
+    return [mouseX,mouseY]
 
 size = 100
-dist = [0,0,0]
+dist = [0,0,500]
 rots = [0,0,0]
+pointTo = [0,0,0]
 
 def render():
     canvas.delete("all")
     cube3D = getCubePoints(size,dist,rots)
+    cube3D = facePoint(cube3D,pointTo,dist)
     cube2D = getDots(cube3D)
     drawCube(cube2D,2,"white")
     canvas.pack()
 
-    dist[2] += 2
-    rots[2] += 1
+    mouse = getMouse()
+    pointTo[0] = mouse[0]
+    pointTo[1] = mouse[1]
 
-    root.after(8,render)
+    root.after(16,render)
 
 render()
 
