@@ -121,7 +121,7 @@ class Object():
             dots = []
             for point in self.points:
                 x = centerX + point[0]*( centerX/(centerX+point[2]) )
-                y = centerY + point[1]*( centerX/(centerX+point[2]) )
+                y = centerY - point[1]*( centerX/(centerX+point[2]) )
                 dots.append([x,y])
             return dots
     
@@ -139,14 +139,14 @@ class Cube(Object):
         cubeX = center[0]
         cubeY = center[1]
         cubeZ = center[2]
-        points = [[cubeX+halfSize,-cubeY+halfSize,cubeZ-halfSize],
-                  [cubeX-halfSize,-cubeY+halfSize,cubeZ-halfSize],
-                  [cubeX+halfSize,-cubeY-halfSize,cubeZ-halfSize],
-                  [cubeX-halfSize,-cubeY-halfSize,cubeZ-halfSize],
-                  [cubeX+halfSize,-cubeY+halfSize,cubeZ+halfSize],
-                  [cubeX-halfSize,-cubeY+halfSize,cubeZ+halfSize],
-                  [cubeX+halfSize,-cubeY-halfSize,cubeZ+halfSize],
-                  [cubeX-halfSize,-cubeY-halfSize,cubeZ+halfSize]]
+        points = [[cubeX+halfSize,cubeY-halfSize,cubeZ-halfSize],
+                  [cubeX-halfSize,cubeY-halfSize,cubeZ-halfSize],
+                  [cubeX+halfSize,cubeY+halfSize,cubeZ-halfSize],
+                  [cubeX-halfSize,cubeY+halfSize,cubeZ-halfSize],
+                  [cubeX+halfSize,cubeY-halfSize,cubeZ+halfSize],
+                  [cubeX-halfSize,cubeY-halfSize,cubeZ+halfSize],
+                  [cubeX+halfSize,cubeY+halfSize,cubeZ+halfSize],
+                  [cubeX-halfSize,cubeY+halfSize,cubeZ+halfSize]]
         edges = [[0,1],[0,2],[3,1],[3,2],
                  [0,4],[1,5],[2,6],[3,7],
                  [4,5],[4,6],[7,5],[7,6]]
@@ -156,7 +156,7 @@ class Cube(Object):
 
 def getMouse():
     mouseX = root.winfo_pointerx() - root.winfo_rootx() - (width/2)
-    mouseY = root.winfo_pointery() - root.winfo_rooty() - (height/2)
+    mouseY = -(root.winfo_pointery() - root.winfo_rooty() - (height/2))
     return [mouseX,mouseY]
 
 cube = Cube(200,[0,0,250])
@@ -168,10 +168,10 @@ def render():
     canvas.pack()
 
     # << Cube Moving Backwards Example >>
-    # cube.move([0,0,2])
+    # cube.move([0,0,0])
 
     # << Cube Rotating Example >>
-    # cube.rotate([cube.rotation[0]+1,0,0],cube.center)
+    # cube.rotate([0,cube.rotation[1]+1,0],cube.center)
 
     # << Mouse Tracker Example >>
     mouse = getMouse()
