@@ -87,14 +87,9 @@ class Object():
         dy = y-ry
         dz = z-rz
 
-        if (z == rz):
-            rotRY = math.atan2(dx,dy)
-            self.rotate(toDegs([0,rotRY,0]),self.center)
-
-        else:
-            rotRX = math.atan2(dx,dz)
-            rotRZ = math.atan2(dy,dz)
-            self.rotate(toDegs([rotRX,0,rotRZ]),self.center)
+        rotRX = math.atan2(dx,dz)
+        rotRZ = math.atan2(dy,dz)
+        self.rotate(toDegs([rotRX,0,rotRZ]),self.center)
 
     def move(self,distances):
         def movePoint(point,distances):
@@ -112,6 +107,31 @@ class Object():
         self.points = pointsMoved
         self.basePoints = pointsMovedBase
         self.center = movePoint(self.center,distances)
+    
+    def scale(self,scales,scalePoint):
+        xScale = scales[0]
+        xPoint = scalePoint[0]
+        yScale = scales[1]
+        yPoint = scalePoint[1]
+        zScale = scales[2]
+        zPoint = scalePoint[2]
+
+        newPoints = []
+        for point in self.points:
+            xNew = xPoint+(point[0]-xPoint)*xScale
+            yNew = yPoint+(point[1]-yPoint)*yScale
+            zNew = zPoint+(point[2]-zPoint)*zScale
+            newPoints.append([xNew,yNew,zNew])
+        
+        newBasePoints = []
+        for point in self.basePoints:
+            xNew = xPoint+(point[0]-xPoint)*xScale
+            yNew = yPoint+(point[1]-yPoint)*yScale
+            zNew = zPoint+(point[2]-zPoint)*zScale
+            newBasePoints.append([xNew,yNew,zNew])
+        
+        self.points = newPoints
+        self.basePoints = newBasePoints
 
     
     def draw(self,thickness,colour):
@@ -121,7 +141,7 @@ class Object():
             dots = []
             for point in self.points:
                 x = centerX + point[0]*( centerX/(centerX+point[2]) )
-                y = centerY + point[1]*( centerX/(centerX+point[2]) )
+                y = centerY - point[1]*( centerX/(centerX+point[2]) )
                 dots.append([x,y])
             return dots
     
@@ -139,14 +159,14 @@ class Cube(Object):
         cubeX = center[0]
         cubeY = center[1]
         cubeZ = center[2]
-        points = [[cubeX+halfSize,-cubeY+halfSize,cubeZ-halfSize],
-                  [cubeX-halfSize,-cubeY+halfSize,cubeZ-halfSize],
-                  [cubeX+halfSize,-cubeY-halfSize,cubeZ-halfSize],
-                  [cubeX-halfSize,-cubeY-halfSize,cubeZ-halfSize],
-                  [cubeX+halfSize,-cubeY+halfSize,cubeZ+halfSize],
-                  [cubeX-halfSize,-cubeY+halfSize,cubeZ+halfSize],
-                  [cubeX+halfSize,-cubeY-halfSize,cubeZ+halfSize],
-                  [cubeX-halfSize,-cubeY-halfSize,cubeZ+halfSize]]
+        points = [[cubeX+halfSize,cubeY-halfSize,cubeZ-halfSize],
+                  [cubeX-halfSize,cubeY-halfSize,cubeZ-halfSize],
+                  [cubeX+halfSize,cubeY+halfSize,cubeZ-halfSize],
+                  [cubeX-halfSize,cubeY+halfSize,cubeZ-halfSize],
+                  [cubeX+halfSize,cubeY-halfSize,cubeZ+halfSize],
+                  [cubeX-halfSize,cubeY-halfSize,cubeZ+halfSize],
+                  [cubeX+halfSize,cubeY+halfSize,cubeZ+halfSize],
+                  [cubeX-halfSize,cubeY+halfSize,cubeZ+halfSize]]
         edges = [[0,1],[0,2],[3,1],[3,2],
                  [0,4],[1,5],[2,6],[3,7],
                  [4,5],[4,6],[7,5],[7,6]]
@@ -156,26 +176,47 @@ class Cube(Object):
 
 def getMouse():
     mouseX = root.winfo_pointerx() - root.winfo_rootx() - (width/2)
-    mouseY = root.winfo_pointery() - root.winfo_rooty() - (height/2)
+    mouseY = -(root.winfo_pointery() - root.winfo_rooty() - (height/2))
     return [mouseX,mouseY]
 
-cube = Cube(200,[0,0,250])
+cube = Cube(200,[0,0,550])
 fps = 60
+
+# << Part of Cube Changing Size Example >>
+increase = True
+currentScale = 1
+amount = 1.015
+bounds = {"lower":0.67,"upper":1.5}
 
 def render():
     canvas.delete("all")
     cube.draw(2,"white")
     canvas.pack()
 
+    # << Cube Changing Size Example >>
+    global increase, currentScale, amount, bounds
+    if increase:
+        cube.scale([amount,amount,amount],cube.center)
+        currentScale *= amount
+    else:
+        cube.scale([1/amount,1/amount,1/amount],cube.center)
+        currentScale /= amount
+    if currentScale > bounds["upper"] or currentScale < bounds["lower"]:
+        increase = not increase
+
     # << Cube Moving Backwards Example >>
-    # cube.move([0,0,2])
+    # cube.move([0,0,10])
 
     # << Cube Rotating Example >>
-    # cube.rotate([cube.rotation[0]+1,0,0],cube.center)
+    # cube.rotate([0,cube.rotation[1]+1,0],cube.center)
 
     # << Mouse Tracker Example >>
+    # mouse = getMouse()
+    # cube.facePoint([mouse[0],mouse[1],0])
+
+    # << Simple Viewer Example >>
     mouse = getMouse()
-    cube.facePoint([mouse[0],mouse[1],0])
+    cube.rotate([mouse[0]/3,0,-mouse[1]/3],cube.center)
 
     root.after(round(1000/fps),render)
 
