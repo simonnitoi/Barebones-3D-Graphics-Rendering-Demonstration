@@ -205,7 +205,7 @@ def render():
         increase = not increase
 
     # << Cube Moving Backwards Example >>
-    # cube.move([0,0,10])
+    # cube.move([0,0,2])
 
     # << Cube Rotating Example >>
     # cube.rotate([0,cube.rotation[1]+1,0],cube.center)
