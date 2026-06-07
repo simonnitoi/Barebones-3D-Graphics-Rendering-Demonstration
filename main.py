@@ -183,10 +183,10 @@ cube = Cube(200,[0,0,550])
 fps = 60
 
 # << Part of Cube Changing Size Example >>
-increase = True
-currentScale = 1
-amount = 1.015
-bounds = {"lower":0.67,"upper":1.5}
+# increase = True
+# currentScale = 1
+# amount = 1.015
+# bounds = {"lower":0.67,"upper":1.5}
 
 def render():
     canvas.delete("all")
@@ -194,15 +194,15 @@ def render():
     canvas.pack()
 
     # << Cube Changing Size Example >>
-    global increase, currentScale, amount, bounds
-    if increase:
-        cube.scale([amount,amount,amount],cube.center)
-        currentScale *= amount
-    else:
-        cube.scale([1/amount,1/amount,1/amount],cube.center)
-        currentScale /= amount
-    if currentScale > bounds["upper"] or currentScale < bounds["lower"]:
-        increase = not increase
+    # global increase, currentScale, amount, bounds
+    # if increase:
+    #     cube.scale([amount,amount,amount],cube.center)
+    #     currentScale *= amount
+    # else:
+    #     cube.scale([1/amount,1/amount,1/amount],cube.center)
+    #     currentScale /= amount
+    # if currentScale > bounds["upper"] or currentScale < bounds["lower"]:
+    #     increase = not increase
 
     # << Cube Moving Backwards Example >>
     # cube.move([0,0,2])
