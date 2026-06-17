@@ -1,7 +1,7 @@
 import math
 import engine
 
-engine.createEnvironment(750,750,"black",120)
+engine.createEnvironment(750,750,"black",90)
 
 # << to get mouse location relative to tkinter window >>
 def getMouse():

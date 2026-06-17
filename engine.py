@@ -209,17 +209,26 @@ class Object():
             z = xyz[2]
             return math.sqrt(x**2+y**2+z**2)
 
+        def isVisible(pointIndices):
+            for index in pointIndices:
+                if (cameraDist + self.points[index][2]) <= 0.1:
+                    return False
+            return True
+
         # << Sorting for painter's algorithm >>
         items = []
 
         for point in range(len(self.points)):
-            items.append({"type":"point","coords":point,"distance":getDist([point])})
+            if isVisible([point]):
+                items.append({"type":"point","coords":point,"distance":getDist([point])})
         
         for edge in self.edges:
-            items.append({"type":"edge","coords":edge,"distance":getDist(edge)})
+            if isVisible(edge):
+                items.append({"type":"edge","coords":edge,"distance":getDist(edge)})
         
         for face in self.faces:
-            items.append({"type":"face","coords":face,"distance":getDist(face)})
+            if isVisible(face):
+                items.append({"type":"face","coords":face,"distance":getDist(face)})
 
         items.sort(key=itemgetter("distance"),reverse=True)
 
