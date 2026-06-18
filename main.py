@@ -23,8 +23,8 @@ engine.root.bind("<KeyRelease>", keyUp)
 
 
 
-cube = engine.Cube(200,[0,0,250])
-fps = 60
+cube = engine.Cube(200,[250,250,250])
+fps = 144
 
 # << Part of Changing Size Example >>
 increase = True
@@ -32,11 +32,9 @@ currentScale = 1
 amount = 1.015
 bounds = {"lower":0.7,"upper":1.5}
 
-freecamSpeed = 3
+freecamSpeed = 5
 
 def render():
-    engine.canvas.delete("all")
-    cube.draw(10,["white","blue","red"])
 
     # << Changing Size Example >>
     # global increase, currentScale, amount, bounds
@@ -53,7 +51,7 @@ def render():
     # cube.move([2,0,3])
 
     # << Cube Rotating Example >>
-    # cube.rotate([cube.rotation[0]+2,0,0],cube.center)
+    # cube.rotate([cube.rotation[0]+2,0,0],cube.center,True)
 
     # << Mouse Tracker Example >>
     # mouse = getMouse()
@@ -63,21 +61,55 @@ def render():
     # mouse = getMouse()
     # cube.rotate([mouse[0]/3,0,-mouse[1]/3],cube.center)
 
-    # << Very Simple Freecam Viewer Example >>
+    # << Freecam Viewer Example (Object base points ARE NOT affected) >>
+    # mouse = getMouse()
+    # cube.rotate([mouse[0]/3,0,-mouse[1]/3],[0,0,-engine.cameraDist])
+    # if "w" in keys:
+    #     cube.move([0,0,-freecamSpeed])
+    # if "s" in keys:
+    #     cube.move([0,0,freecamSpeed])
+    # if "a" in keys:
+    #     cube.move([freecamSpeed,0,0])
+    # if "d" in keys:
+    #     cube.move([-freecamSpeed,0,0])
+    # if "space" in keys:
+    #     cube.move([0,-freecamSpeed,0])
+    # if "c" in keys:
+    #     cube.move([0,freecamSpeed,0])
+
+    # << Dynamic Freecam Viewer Example (Object base points ARE affected) >>
     mouse = getMouse()
-    cube.rotate([mouse[0]/3,0,-mouse[1]/3],[0,0,-engine.cameraDist])
+    yaw = mouse[0]/3
+    pitch = -mouse[1]/3
+    radYaw = math.radians(yaw)
+    xTravel = 0
+    yTravel = 0
+    zTravel = 0
     if "w" in keys:
-        cube.move([0,0,-freecamSpeed])
+        xTravel -= freecamSpeed*math.sin(radYaw)
+        zTravel -= freecamSpeed*math.cos(radYaw)
     if "s" in keys:
-        cube.move([0,0,freecamSpeed])
+        xTravel += freecamSpeed*math.sin(radYaw)
+        zTravel += freecamSpeed*math.cos(radYaw)
     if "a" in keys:
-        cube.move([freecamSpeed,0,0])
+        xTravel += freecamSpeed*math.cos(radYaw)
+        zTravel -= freecamSpeed*math.sin(radYaw)
     if "d" in keys:
-        cube.move([-freecamSpeed,0,0])
+        xTravel -= freecamSpeed*math.cos(radYaw)
+        zTravel += freecamSpeed*math.sin(radYaw)
     if "space" in keys:
-        cube.move([0,-freecamSpeed,0])
+        yTravel -= freecamSpeed
     if "c" in keys:
-        cube.move([0,freecamSpeed,0])
+        yTravel += freecamSpeed
+
+    cube.move([xTravel, yTravel, zTravel])
+    cube.rotate([yaw,0,pitch],[0,0,-engine.cameraDist])
+
+
+
+
+    engine.canvas.delete("all")
+    cube.draw(10,["white","blue","red"])
 
     engine.root.after(round(1000/fps),render)
 

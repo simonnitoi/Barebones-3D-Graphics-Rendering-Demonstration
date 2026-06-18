@@ -56,8 +56,11 @@ class Object():
         
         self.edges = getEdges(faces)
     
-    def rotate(self,rotationDegrees,rotationPoint):
-        rotationRadians = toRads(rotationDegrees)
+    def rotate(self,rotationDegrees,rotationPoint,trueRotation=False):
+        if trueRotation:
+            rotationRadians = toRads([rotationDegrees[0]-self.rotation[0],rotationDegrees[1]-self.rotation[1],rotationDegrees[2]-self.rotation[2]])
+        else:
+            rotationRadians = toRads(rotationDegrees)
 
         def rotatePoint(point,rots,rotPoint):
             # collect data
@@ -101,6 +104,10 @@ class Object():
         self.rotation[2] = rotationDegrees[2]
 
         self.points = pointsRotated
+
+        if trueRotation:
+            self.basePoints = pointsRotated
+            self.center = rotatePoint(self.center,rotationRadians,rotationPoint)
     
     def facePoint(self,pointTo,rotPoint):
         # collect data
