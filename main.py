@@ -61,7 +61,7 @@ def render():
     # mouse = getMouse()
     # cube.rotate([mouse[0]/3,0,-mouse[1]/3],cube.center)
 
-    # << Freecam Viewer Example (Object base points ARE NOT affected) >>
+    # << Freecam Viewer Example >>
     # mouse = getMouse()
     # cube.rotate([mouse[0]/3,0,-mouse[1]/3],[0,0,-engine.cameraDist])
     # if "w" in keys:
@@ -77,7 +77,7 @@ def render():
     # if "c" in keys:
     #     cube.move([0,freecamSpeed,0])
 
-    # << Dynamic Freecam Viewer Example (Object base points ARE affected) >>
+    # << Dynamic Freecam Viewer Example >>
     mouse = getMouse()
     yaw = mouse[0]/3
     pitch = -mouse[1]/3
