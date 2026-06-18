@@ -6,6 +6,7 @@ Renders a 3D object from scratch using just native python. I made it my mission 
 - Only cubes have been integrated as a preset object via the `Cube` class, which you can use to conviniently create cubes, since crafting models otherwise requires plotting each individual point and face yourself (very tedious).
 - Points, edges, and faces (“items”) are simply rendered via averaging the (x,y,z) of involved points for the estimated center point of each item, and then drawing in order of painter's algorithm (farthest to closest). As such, be aware of possible rendering limitations that may arise.
 - The camera is defaulted to 90 degrees of FOV. Objects will experience some degree of FOV warping from the camera (more fov = more distortion), this is normal.
+- Some of the example programs which are commented within the `render()` funtion in `main.py` will not work together properly. You will also likely encounter issues with having multiple objects at once.
 
 ## Setup
 1. Clone the repository.
